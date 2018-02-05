@@ -1,4 +1,3 @@
 /target
-/build.sbt
 /.idea
-/project
+/out
