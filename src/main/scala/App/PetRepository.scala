@@ -7,20 +7,35 @@ import scala.collection.mutable.ArrayBuffer
   */
 object PetRepository extends App {
   
-  class Pet (name : String)
+  case class Pet (name : String)
+  case class Dog(override val name: String) extends Pet(name)
+  case class Cat(override val name: String) extends Pet(name)
+
   private val pets = new ArrayBuffer[Pet]()
 
   // Andy
   def all() : List[Pet] = Nil
   def findByName(name : String) : Option[Pet] = None
-  def dogs() : List[Pet] = Nil
-  def cats() : List[Pet] = Nil
+  def dogs() : List[Dog] = Nil
+  def cats() : List[Cat] = Nil
 
   // John
-  def other(): List[Pet] = Nil
-  def add(pet: Pet): List[Pet] = Nil
-  def removeByName(name: String): List[Pet] = Nil
-  def update(pet: Pet): List[Pet] = Nil
+  def other(): List[Pet] = {
+    val filtered = pets.filter(p => p.isInstanceOf[Pet])
+    filtered.toList
+  }
+  def add(pet: Pet*): List[Pet] = {
+    pet.map(p => pets += p)
+    pets.toList
+  }
+
+  def removeByName(name: String): List[Pet] = {
+    val filtered = pets.filter(p => p.name == name)
+    filtered.toList
+  }
+  def update(pet: Pet): List[Pet] = {
+    ???
+  }
 }
 
 
