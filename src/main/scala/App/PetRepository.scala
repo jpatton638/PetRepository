@@ -1,7 +1,5 @@
 package App
 
-import petRepo.Pet
-
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -9,90 +7,88 @@ import scala.collection.mutable.ArrayBuffer
   */
 object PetRepository extends App {
 
-  trait Pet
-  case class Dog(name: String) extends Pet
-  case class Cat(name: String) extends Pet
+  trait Pet {
+    val name: String
+  }
+
+  case class Dog(override val name: String) extends Pet
+  case class Cat(override val name: String) extends Pet
+  case class Hamster(override val name: String) extends Pet
 
   private val _pets = new ArrayBuffer[Pet]()
 
   // Andy
   def all() : List[Pet] = {
-    println(_pets.toList)
+    println(s"All: ${_pets.toList}")
     _pets.toList
   }
 
-  def findByName(name: String) : Option[Pet] = _pets.find(p => Some(name).contains(name))
-
+  def findByName(name: String) : Option[Pet] = {
+    val found = _pets.find(p => p.name equals name)
+    println(s"Find By Name: $found")
+    found
+  }
 
   def dogs : List[Dog] = {
-    _pets.toList.flatMap { case d @ Dog( _) =>
-      println(Some(d))
-      Some(d)
-    case _ =>
-      println("No Dogs Found")
-      None
+
+    val dogBuffer = new ArrayBuffer[Dog]()
+
+    _pets.toList.map {
+      case d @ Dog(_) => dogBuffer += d
+      case _ => null
     }
+    println(s"Dogs: ${dogBuffer.toList}")
+    dogBuffer.toList
   }
 
   def cats : List[Cat] = {
-    _pets.toList.flatMap { case c @ Cat(_) =>
-      println(Some(c))
-      Some(c)
-    case _ =>
-      println("No Cats Found")
-      None
+
+    val catBuffer = new ArrayBuffer[Cat]()
+
+    _pets.toList.map {
+      case c @ Cat(_) => catBuffer += c
+      case _ => null
     }
+    println(s"Cats: ${catBuffer.toList}")
+    catBuffer.toList
   }
 
   def other() : List[Pet] = {
-    println(_pets.toList)
-    _pets.toList
-  }
 
-  // John
-//  def other(): List[Pet] = {
-//    val filtered = _pets.filter(p => p.isInstanceOf[Pet])
-//    println(filtered.toList)
-//    filtered.toList
-//  }
+    val otherBuffer = new ArrayBuffer[Pet]()
+
+    _pets.toList.map {
+      case _: Dog => null
+      case _: Cat => null
+      case o @ _ => otherBuffer += o
+    }
+    println(s"Other Pets: ${otherBuffer.toList}")
+    otherBuffer.toList
+  }
 
   def add(pet: Pet*): List[Pet] = {
     pet.map(p => _pets += p)
-    println(_pets.toList)
+    println(s"Add: ${_pets.toList}")
     _pets.toList
   }
 
   def removeByName(name: String): List[Pet] = {
-    val filtered = _pets.filter(p => Some(name).contains(name))
-    println(filtered.toList)
-    filtered.toList
+    val filtered = _pets.toList.filterNot(p => p.name equals name)
+    println(s"Removed: $filtered")
+    filtered
   }
+
   def update(pet: Pet): List[Pet] = {
-    val petsList = _pets.toList
-      petsList.map(p =>
+    _pets.toList.map(p =>
       if (p == pet) {
         _pets -= p
         _pets += pet
       }
     )
-    println(_pets.toList)
+    println(s"Updated: ${_pets.toList}")
     _pets.toList
   }
 
-  val pet1 = Dog("Harry")
-  val pet2 = Cat("James")
-  val pet3 = Dog("Bogdan")
-  val pet4 = Dog("Lawrence")
-  val pet5 = Cat("Matty")
-
-  add(pet1, pet2, pet3, pet4, pet5) // Done
-  all() // Done
-  findByName("James") // todo
-  dogs // todo
-  cats // todo
-  other() // todo
-  removeByName("Bogdan") // todo
-  update(pet2) // Done
 }
 
 
