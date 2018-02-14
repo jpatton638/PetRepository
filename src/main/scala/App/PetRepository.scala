@@ -85,14 +85,14 @@ object PetRepository extends App {
   val pet4 = Dog("Lawrence")
   val pet5 = Cat("Matty")
 
-  add(pet1, pet2, pet3, pet4, pet5)
-  all()
-  findByName("James")
-  dogs
-  cats
-  other()
-  removeByName("Bogdan")
-  update(pet2)
+  add(pet1, pet2, pet3, pet4, pet5) // Done
+  all() // Done
+  findByName("James") // todo
+  dogs // todo
+  cats // todo
+  other() // todo
+  removeByName("Bogdan") // todo
+  update(pet2) // Done
 }
 
 
